@@ -6,7 +6,19 @@ const router = express.Router();
 
 router.use(authController.protect);
 
-router.post('/scheduleRide', rideController.scheduleRide);
-router.get('/availableRides', rideController.availableRide)
+router
+    .route('/scheduleRide')
+    .post(rideController.scheduleRide)
+    .patch(rideController.addCoPassenger);
+router.get('/availableRides', rideController.availableRide);
+router
+    .route('/myScheduledRides')
+    .get(rideController.myScheduledRides)
+    .delete(rideController.deleteScheduledRide)
+    .patch(rideController.updateScheduledRide);
+router
+    .route('/myRequestedRides')
+    .get(rideController.myRequestedRides)
+    .delete(rideController.deleteRequestedRide);
 
 module.exports = router;

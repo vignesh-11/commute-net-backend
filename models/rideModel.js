@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
+// const validator = require('validator');
 
 const rideSchema = new mongoose.Schema({
     startLocation: {
@@ -30,12 +30,12 @@ const rideSchema = new mongoose.Schema({
         enum: ['4-wheeler', '2-wheeler', 'cab', 'auto-rikshaw'],
         required: [true, 'Please enter mode of transportation'],
     },
-    numPassengers: Number,
+    maxNumPassengers: Number,
     coPassengers: [{
         type: mongoose.Schema.ObjectId,
         ref: 'User',
-    }],
-    createdAt: {
+    }, ],
+    scheduledAt: {
         type: Date,
         default: Date.now(),
     },
@@ -45,13 +45,13 @@ const rideSchema = new mongoose.Schema({
             default: 'LineString',
             enum: ['LineString'],
         },
-        coordinates: Array
-    }
-})
+        coordinates: Array,
+    },
+});
 
-rideSchema.index({ startLocation: "2dsphere" });
-rideSchema.index({ endLocation: "2dsphere" });
-rideSchema.index({ route: "2dsphere" });
+rideSchema.index({ startLocation: '2dsphere' });
+rideSchema.index({ endLocation: '2dsphere' });
+rideSchema.index({ route: '2dsphere' });
 
 rideSchema.pre(/^find/, function(next) {
     this.populate({
@@ -59,7 +59,7 @@ rideSchema.pre(/^find/, function(next) {
         select: '-__v -role -email',
     }).populate({
         path: 'coPassengers',
-        select: '-__v -role -email'
+        select: '-__v -role -email',
     });
     next();
 });
