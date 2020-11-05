@@ -23,6 +23,10 @@ exports.scheduleRide = catchAsync(async(req, res, next) => {
 exports.availableRide = catchAsync(async(req, res, next) => {
     const startLocation = req.body.startLocation;
     const endLocation = req.body.endLocation;
+    const dateTime = Date.parse(req.body.scheduledAt);
+    const userId = req.user.id;
+
+    console.log(dateTime);
 
     const ridesStart = await Ride.find({
         route: {
@@ -47,7 +51,6 @@ exports.availableRide = catchAsync(async(req, res, next) => {
             },
         },
     });
-
     //intersection
     let rides = [];
     if (ridesEnd && ridesStart) {
@@ -67,7 +70,9 @@ exports.availableRide = catchAsync(async(req, res, next) => {
                         n1.startLocation.coordinates[1],
                         n1.startLocation.coordinates[0]
                     ) &&
-                    n1.coPassengers.length + 1 < n1.maxNumPassengers
+                    n1.coPassengers.length + 1 < n1.maxNumPassengers &&
+                    Date.parse(n1.scheduledAt) > dateTime &&
+                    n1.owner._id != userId
                 ) {
                     return true;
                 }
@@ -167,7 +172,7 @@ exports.addCoPassenger = catchAsync(async(req, res, next) => {
         return next(new AppError('Ride is already full', 400));
     }
     const user = req.user.id;
-    const ride = await Ride.updateOne({ _id: req.body.rideId }, { $push: { coPassengers: user } });
+    await Ride.updateOne({ _id: req.body.rideId }, { $push: { coPassengers: user } });
 
     res.status(200).json({
         status: 'success',

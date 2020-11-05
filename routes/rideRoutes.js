@@ -10,7 +10,7 @@ router
     .route('/scheduleRide')
     .post(rideController.scheduleRide)
     .patch(rideController.addCoPassenger);
-router.get('/availableRides', rideController.availableRide);
+router.post('/availableRides', rideController.availableRide);
 router
     .route('/myScheduledRides')
     .get(rideController.myScheduledRides)
