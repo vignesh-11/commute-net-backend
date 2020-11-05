@@ -26,7 +26,7 @@ exports.availableRide = catchAsync(async(req, res, next) => {
     const dateTime = Date.parse(req.body.scheduledAt);
     const userId = req.user.id;
 
-    console.log(dateTime);
+    const timeDiff = 7200000;
 
     const ridesStart = await Ride.find({
         route: {
@@ -71,7 +71,8 @@ exports.availableRide = catchAsync(async(req, res, next) => {
                         n1.startLocation.coordinates[0]
                     ) &&
                     n1.coPassengers.length + 1 < n1.maxNumPassengers &&
-                    Date.parse(n1.scheduledAt) > dateTime &&
+                    Date.parse(n1.scheduledAt) - timeDiff <= dateTime &&
+                    dateTime <= Date.parse(n1.scheduledAt) + timeDiff &&
                     n1.owner._id != userId
                 ) {
                     return true;
