@@ -168,7 +168,7 @@ exports.addCoPassenger = catchAsync(async(req, res, next) => {
     const numCheck = await Ride.findOne({
         _id: req.body.rideId,
     }, { maxNumPassengers: 1, coPassengers: 1 });
-    console.log(numCheck);
+
     if (numCheck.maxNumPassengers <= numCheck.coPassengers.length + 1) {
         return next(new AppError('Ride is already full', 400));
     }

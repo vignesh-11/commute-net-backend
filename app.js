@@ -12,6 +12,7 @@ const cookieParser = require('cookie-parser');
 //Route imports
 const userRouter = require('./routes/userRoutes');
 const rideRouter = require('./routes/rideRoutes');
+const chatRouter = require('./routes/chatRoutes');
 
 //custom utility module imports
 const AppError = require('./utils/appError');
@@ -54,6 +55,7 @@ app.use((req, res, next) => {
 //routes
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/rides', rideRouter);
+app.use('/api/v1/chats', chatRouter);
 
 app.all('*', (req, res, next) => {
     // const err = new Error(`Can't find ${req.originalUrl} on this server`);

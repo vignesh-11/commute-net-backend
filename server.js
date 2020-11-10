@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const dotnev = require('dotenv');
 const app = require('./app');
+const chatSocket = require('./utils/chatSocket');
 
 process.on('uncaughtException', (err) => {
     console.log('Uncaught Exception! Server shutting down...');
@@ -30,6 +31,8 @@ const port = 3000;
 const server = app.listen(port, () => {
     console.log(`listening on port ${port}...`);
 });
+
+chatSocket.socket(server);
 
 process.on('unhandledRejection', (err) => {
     console.log('Unhandled rejection! Server shutting down...');
