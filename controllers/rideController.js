@@ -73,7 +73,8 @@ exports.availableRide = catchAsync(async(req, res, next) => {
                     n1.coPassengers.length + 1 < n1.maxNumPassengers &&
                     Date.parse(n1.scheduledAt) - timeDiff <= dateTime &&
                     dateTime <= Date.parse(n1.scheduledAt) + timeDiff &&
-                    n1.owner._id != userId
+                    n1.owner._id != userId &&
+                    checkPassenger(n1.coPassengers, userId)
                 ) {
                     return true;
                 }
@@ -179,6 +180,15 @@ exports.addCoPassenger = catchAsync(async(req, res, next) => {
         status: 'success',
     });
 });
+
+function checkPassenger(passengerList, userId) {
+    for (let i = 0; i < passengerList.length; i++) {
+        if (passengerList[i]._id.toString() === userId) {
+            return false;
+        }
+    }
+    return true;
+}
 
 function calcDist(lat1, lon1, lat2, lon2) {
     var R = 6371; // km
