@@ -138,7 +138,7 @@ exports.updateScheduledRide = catchAsync(async(req, res, next) => {
 });
 
 exports.deleteRequestedRide = catchAsync(async(req, res, next) => {
-    const user = req.user.id;
+    const user = req.body.userId;
     const ride = await Ride.updateOne({ _id: req.body.rideId }, { $pull: { coPassengers: user } });
     if (!ride) {
         return next(
@@ -155,6 +155,7 @@ exports.deleteScheduledRide = catchAsync(async(req, res, next) => {
         _id: req.body.rideId,
         owner: req.user.id,
     });
+    console.log(ride);
     if (!ride) {
         return next(
             new AppError('You do not have permission to perform this action', 403)
